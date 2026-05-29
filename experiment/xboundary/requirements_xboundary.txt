@@ -1,0 +1,27 @@
+# X-Boundary baseline 격리 학습 런타임 (Colab 별도 런타임 권장)
+# 메인 over_refuse 파이프라인 transformers 와 충돌 가능 → 별도 install.
+#
+# 저자 lorra_x_boundary.py 의존: peft, accelerate, transformers, deepspeed-style trainer.
+# 우리 train_xboundary.py 는 deepspeed/accelerate 의존 제거 — 순수 torch loop. peft 만 필요.
+
+# core LM stack
+transformers>=4.45,<5.0
+peft>=0.10,<1.0
+accelerate>=0.30,<2.0
+sentencepiece
+protobuf
+
+# datasets — circuit_breakers + ORbench + ultrachat_200k 로드용
+datasets>=2.18,<5.0
+
+# numeric / utils
+numpy
+torch>=2.1
+tqdm
+
+# WildGuard (src.classifier) — 평가용 (eval_xboundary)
+# 별도 model load → transformers stack 만 있으면 OK
+
+# NOTE: Colab 런타임에 torchao 0.10.0 이 미리 설치되어 있는데, peft>=0.18 의
+# is_torchao_available() 가 "0.16 미만이면 ImportError" 정책 → LoRA inject 실패.
+# 우리는 torchao 안 쓰므로 install 셀에서 `pip uninstall -y torchao` 로 제거 (xboundary.ipynb).
